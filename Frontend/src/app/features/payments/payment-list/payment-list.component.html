@@ -1,0 +1,41 @@
+
+<div class="page">
+  <h2>My Payments</h2>
+
+  <div *ngIf="loading()">Loading…</div>
+  <div class="error" *ngIf="error()">{{ error() }}</div>
+
+  <table class="table" *ngIf="!loading() && data().length">
+    <thead>
+      <tr>
+        <th>Txn ID</th>
+        <th>Reservation</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Paid At</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of rowsPaged">
+        <td>{{ p.transactionId }}</td>
+        <td>{{ p.reservationId ? ('BK-' + p.reservationId) : '-' }}</td>
+        <td>₹ {{ p.amount }}</td>
+
+<td>
+  <span [ngClass]="{
+      'status-paid': (p.status || '').toUpperCase() === 'PAID',
+      'status-pending': (p.status || '').toUpperCase() === 'PENDING',
+      'status-failed': (p.status || '').toUpperCase() === 'FAILED'
+  }">{{ p.status }}</span>
+</td>
+        <td>{{ p.paymentTime | date: 'medium' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pagination" *ngIf="data().length">
+    <button (click)="prev()">Previous</button>
+    <span>Page {{ page() }}</span>
+    <button (click)="next()">Next</button>
+  </div>
+</div>

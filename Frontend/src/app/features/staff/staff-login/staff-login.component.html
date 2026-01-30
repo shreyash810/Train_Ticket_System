@@ -1,0 +1,31 @@
+
+<div class="container">
+  <h2>Staff Login</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onLogin()" novalidate>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" formControlName="email" placeholder="staff@domain.com" />
+      <div class="error" *ngIf="f['email'].touched && f['email'].errors">
+        <span *ngIf="f['email'].errors['required']">Email is required.</span>
+        <span *ngIf="f['email'].errors['email']">Please enter a valid email address.</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" formControlName="password" placeholder="Enter your password" />
+      <div class="error" *ngIf="f['password'].touched && f['password'].errors">
+        <span *ngIf="f['password'].errors['required']">Password is required.</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="submit" [disabled]="form.invalid || submitting()">Login</button>
+      <a routerLink="/login" class="link">Back to Passenger Login</a>
+    </div>
+
+    <div class="error global" *ngIf="message()">{{ message() }}</div>
+  </form>
+</div>
+

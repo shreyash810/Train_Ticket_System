@@ -1,0 +1,46 @@
+{
+  "info": {
+    "name": "Train Ticket Passenger APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Register Passenger",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/passenger/register"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\": \"John Doe\", \"email\": \"john@mail.com\", \"mobile\": \"9999999999\", \"address\": \"Ahmedabad\", \"dob\": \"1995-01-01\", \"password\": \"Test@123\"}"
+        }
+      }
+    },
+    {
+      "name": "Login Passenger",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/passenger/login"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"email\": \"john@mail.com\", \"password\": \"Test@123\"}"
+        }
+      }
+    }
+  ]
+}

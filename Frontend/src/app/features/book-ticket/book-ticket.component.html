@@ -1,0 +1,193 @@
+
+<div class="page" [formGroup]="form">
+  <h2>Book Ticket</h2>
+
+  <!-- Search card -->
+  <section class="card search-form">
+    <form (ngSubmit)="onSearch()">
+      <div class="row">
+        <!-- Origin -->
+        <div class="form-group">
+          <label>Origin</label>
+          <select [disabled]="stationsLoading()" formControlName="origin">
+            <option value="" disabled selected>Select origin</option>
+            <option *ngFor="let s of originStations()" [value]="s">{{ s }}</option>
+          </select>
+          <div class="error" *ngIf="stationsError()">{{ stationsError() }}</div>
+        </div>
+
+        <!-- Destination -->
+        <div class="form-group">
+          <label>Destination</label>
+          <select [disabled]="stationsLoading() || !f['origin'].value" formControlName="destination">
+            <option value="" disabled selected>Select destination</option>
+            <option *ngFor="let s of destinationStations()" [value]="s">{{ s }}</option>
+          </select>
+        </div>
+
+        <!-- Date -->
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" [min]="todayISO" [max]="maxISO" formControlName="date" />
+          <div class="hint small">You can book up to 2 months ahead.</div>
+        </div>
+
+        <!-- Preferred Class -->
+        <div class="form-group">
+          <label>Preferred Class</label>
+          <select formControlName="class">
+            <option value="" disabled selected>Select class</option>
+            <option value="GENERAL">General</option>
+            <option value="SLEEPER">Sleeper</option>
+            <option value="AC">AC</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn-primary" (click)="onSearch()" [disabled]="stationsLoading() || searching()">
+          {{ searching() ? 'Searching...' : 'Search' }}
+        </button>
+      </div>
+
+      <div class="error global" *ngIf="searchError()">{{ searchError() }}</div>
+    </form>
+  </section>
+
+  <!-- Results -->
+  <section class="results" *ngIf="!searching() && paginatedResults().length">
+    <div class="muted small">Showing {{ paginatedResults().length }} of {{ results().length }} result(s).</div>
+
+    <div class="train" *ngFor="let t of paginatedResults()">
+      <div class="train-info">
+        <h3>{{ t.trainName }} ({{ t.trainNo }})</h3>
+        <div class="muted small">
+          {{ t.originStation }} → {{ t.destinationStation }} |
+          {{ t.departureTime }} – {{ t.arrivalTime }}
+        </div>
+      </div>
+
+      <div class="classes">
+        <!-- GENERAL -->
+        <div class="class-card">
+          <div class="row-between">
+            <div>
+              <span class="class-name">General</span>
+              <span class="price">₹{{ getPrice(t, 'GENERAL') }}</span>
+            </div>
+            <div [class]="availableFor(t, 'GENERAL') > 0 ? 'availability' : 'availability full'">
+              {{ availableFor(t, 'GENERAL') > 0 ? 'Available: ' + availableFor(t, 'GENERAL') : 'Full' }}
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn-primary" (click)="selectTrain(t, 'GENERAL')" [disabled]="availableFor(t, 'GENERAL') <= 0">
+              Select General
+            </button>
+          </div>
+        </div>
+
+        <!-- SLEEPER -->
+        <div class="class-card">
+          <div class="row-between">
+            <div>
+              <span class="class-name">Sleeper</span>
+              <span class="price">₹{{ getPrice(t, 'SLEEPER') }}</span>
+            </div>
+            <div [class]="availableFor(t, 'SLEEPER') > 0 ? 'availability' : 'availability full'">
+              {{ availableFor(t, 'SLEEPER') > 0 ? 'Available: ' + availableFor(t, 'SLEEPER') : 'Full' }}
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn-primary" (click)="selectTrain(t, 'SLEEPER')" [disabled]="availableFor(t, 'SLEEPER') <= 0">
+              Select Sleeper
+            </button>
+          </div>
+        </div>
+
+        <!-- AC -->
+        <div class="class-card">
+          <div class="row-between">
+            <div>
+              <span class="class-name">AC</span>
+              <span class="price">₹{{ getPrice(t, 'AC') }}</span>
+            </div>
+            <div [class]="availableFor(t, 'AC') > 0 ? 'availability' : 'availability full'">
+              {{ availableFor(t, 'AC') > 0 ? 'Available: ' + availableFor(t, 'AC') : 'Full' }}
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn-primary" (click)="selectTrain(t, 'AC')" [disabled]="availableFor(t, 'AC') <= 0">
+              Select AC
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="actions">
+      <button class="btn-outline" [disabled]="page()===1" (click)="prevPage()">Prev</button>
+      <span class="muted small">Page {{ page() }} / {{ totalPages() }}</span>
+      <button class="btn-outline" [disabled]="page() >= totalPages()" (click)="nextPage()">Next</button>
+    </div>
+  </section>
+
+  <!-- Booking panel -->
+  <section class="booking-panel" *ngIf="selectedTrain() as st">
+    <h3>Confirm Booking — {{ st.trainName }} ({{ st.trainNo }})</h3>
+    <div class="muted small">
+      {{ st.originStation }} → {{ st.destinationStation }} |
+      {{ st.departureTime }} – {{ st.arrivalTime }}
+    </div>
+
+    <div class="form-inline">
+      <div class="form-group" style="min-width: 160px;">
+        <label>Seats</label>
+        <input type="number" [value]="seatsRequested()" (input)="onSeatInput($event)" />
+      </div>
+
+      <div class="form-group" style="min-width: 180px;">
+        <label>Class</label>
+        <select [value]="selectedClass()" (change)="onClassSelect($event)">
+          <option value="GENERAL">General</option>
+          <option value="SLEEPER">Sleeper</option>
+          <option value="AC">AC</option>
+        </select>
+      </div>
+
+      <div class="actions">
+        <button class="btn-success" (click)="proceedToBook()">Proceed to Book</button>
+      </div>
+    </div>
+
+    <!-- Passenger details -->
+    <div class="passenger-form" *ngIf="showPassengerForm()" [formGroup]="passengersForm">
+      <div formArrayName="passengers">
+        <div class="passenger-row" *ngFor="let _ of passengersArray.controls; let i = index" [formGroupName]="i">
+          <input type="text" placeholder="Passenger Name" formControlName="name" />
+          <input type="number" placeholder="Age" formControlName="age" />
+          <select formControlName="gender">
+            <option value="">Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+          <input type="text" placeholder="ID Type" formControlName="idType" />
+          <input type="text" placeholder="ID Number" formControlName="idNumber" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" (click)="onBook()">Confirm Seats</button>
+        <button class="btn-outline" (click)="showPassengerForm.set(false)">Cancel</button>
+      </div>
+    </div>
+
+    <div class="error" *ngIf="bookingError()">{{ bookingError() }}</div>
+    <div class="hint" *ngIf="bookingSuccess()">{{ bookingSuccess() }}</div>
+
+    <div class="actions" style="margin-top: 8px;">
+      <button class="btn-primary" (click)="goToPayment()">Go to Payment</button>
+    </div>
+  </section>
+</div>

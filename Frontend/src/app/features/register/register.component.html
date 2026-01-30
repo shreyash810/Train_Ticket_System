@@ -1,0 +1,127 @@
+
+<div class="container">
+  <h2>Customer Registration</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onRegister()" novalidate>
+    <!-- Name -->
+    <div class="form-group">
+      <label>Customer Name</label>
+      <input type="text" formControlName="name" placeholder="Enter full name" />
+      <div class="error" *ngIf="f.name.touched && f.name.errors">
+        <span *ngIf="f.name.errors['required']">Name is required.</span>
+        <span *ngIf="f.name.errors['nameInvalid']">Name must be at least 3 characters long and contain only letters.</span>
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" formControlName="email" placeholder="example@domain.com" />
+      <div class="error" *ngIf="f.email.touched && f.email.errors">
+        <span *ngIf="f.email.errors['required']">Email is required.</span>
+        <span *ngIf="f.email.errors['email']">Enter a valid email address.</span>
+        <span *ngIf="f.email.errors['emailTaken']">Email already registered.</span>
+      </div>
+    </div>
+
+    <!-- Mobile with Country Code -->
+    <div class="form-group inline">
+      <div class="inline-item">
+        <label>Country Code</label>
+        <select formControlName="countryCode">
+          <option value="">Select</option>
+          <option value="+91">+91</option>
+        </select>
+        <div class="error" *ngIf="f.countryCode.touched && f.countryCode.errors">
+          <span *ngIf="f.countryCode.errors['required']">Country code is required.</span>
+        </div>
+      </div>
+
+      <div class="inline-item">
+        <label>Mobile Number</label>
+        <input type="text" formControlName="mobile" placeholder="10 digits only" />
+        <div class="error" *ngIf="f.mobile.touched && f.mobile.errors">
+          <span *ngIf="f.mobile.errors['required']">Mobile number is required.</span>
+          <span *ngIf="f.mobile.errors['mobileInvalid']">Enter a valid mobile number.</span>
+          <span *ngIf="f.mobile.errors['mobileTaken']">Mobile number already registered.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Address -->
+    <div class="form-group">
+      <label>Address</label>
+      <textarea formControlName="address" rows="3" placeholder="Enter full address"></textarea>
+      <div class="error" *ngIf="f.address.touched && f.address.errors">
+        <span *ngIf="f.address.errors['required']">Address is required.</span>
+        <span *ngIf="f.address.errors['addressTooShort']">Address must be at least 10 characters long.</span>
+      </div>
+    </div>
+
+    <!-- Date of Birth -->
+    <div class="form-group">
+      <label>Date of Birth</label>
+     
+<input type="date" formControlName="dob" [attr.min]="minDob" [attr.max]="maxDob" />  <!-- 18 years ago (latest allowed) -->
+
+<div class="hint">
+  Select a birth date > 18 and &lt; 70 years.
+</div>
+
+<div class="error" *ngIf="f.dob.touched && f.dob.errors">
+  <span *ngIf="f.dob.errors['required']">Date of birth is required.</span>
+  <span *ngIf="f.dob.errors['invalidDate']">Enter a valid date.</span>
+  <span *ngIf="f.dob.errors['tooYoung']">You must be older than 18 years.</span>
+  <span *ngIf="f.dob.errors['tooOld']">Age must be less than 70 years.</span>
+</div>
+
+    </div>
+
+    <!-- Password -->
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" formControlName="password" placeholder="Min 8 chars w/ upper, lower, digit, special" />
+      <div class="error" *ngIf="f.password.touched && f.password.errors">
+        <span *ngIf="f.password.errors['required']">Password is required.</span>
+        <span *ngIf="f.password.errors['weakPassword']">
+          Password must be at least 8 characters and include a mix of uppercase, lowercase, number, and special character.
+        </span>
+      </div>
+    </div>
+
+    <!-- Confirm Password -->
+    <div class="form-group">
+      <label>Confirm Password</label>
+      <input type="password" formControlName="confirmPassword" placeholder="Re-enter password" />
+      <div class="error" *ngIf="(form.touched || f.confirmPassword.touched) && form.errors?.['passwordsMismatch']">
+        <span>Passwords do not match.</span>
+      </div>
+      <div class="error" *ngIf="f.confirmPassword.touched && f.confirmPassword.errors?.['required']">
+        <span>Confirm password is required.</span>
+      </div>
+    </div>
+
+    <!-- Submit / Reset -->
+    <div class="actions">
+      <button type="submit" [disabled]="form.invalid || submitting()">Register</button>
+      <button type="button" class="secondary" (click)="onReset()">Reset</button>
+    </div>
+
+    <!-- Global submit error -->
+    <div class="error global" *ngIf="submitError()">{{ submitError() }}</div>
+  </form>
+</div>
+
+<!-- Success Acknowledgement Popup -->
+<div class="modal-backdrop" *ngIf="showSuccess()"></div>
+<div class="modal" *ngIf="showSuccess()">
+  <h3>Registration Successful!</h3>
+  <p><strong>User ID:</strong> {{ registeredUser()?.userId }}</p>
+  <p><strong>Name:</strong> {{ registeredUser()?.name }}</p>
+  <p><strong>Email:</strong> {{ registeredUser()?.email }}</p>
+  <div class="actions center">
+    <button (click)="goToLogin()">Login Now</button>
+    <button class="secondary" (click)="registeredUser.set(null)">Close</button>
+  </div>
+</div>
+``

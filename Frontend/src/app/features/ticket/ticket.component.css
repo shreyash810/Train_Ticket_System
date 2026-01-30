@@ -1,0 +1,67 @@
+
+/* ==== PRINT STYLES ==== */
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+@media print {
+  /* Hide interactive UI in print */
+  .btn-primary, .btn-outline, .actions, nav { display: none !important; }
+
+  /* White background for print */
+  body { background: #fff; }
+
+  /* Ticket panel: remove shadows & borders for clean print */
+  .card.ticket {
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Keep section blocks together on page */
+  .section { page-break-inside: avoid; }
+
+  /* Make table header repeat on every printed page */
+  table { page-break-inside: auto; }
+  thead { display: table-header-group; }
+  tfoot { display: table-footer-group; }
+
+  /* Avoid breaking rows across pages */
+  tr { page-break-inside: avoid; page-break-after: auto; }
+}
+
+/* ==== SCREEN STYLES ==== */
+.page { max-width: 980px; margin: 24px auto; padding: 0 16px; }
+h2 { color: var(--brand); margin-bottom: 12px; }
+.card.ticket {
+  background: #fff; border: 1px solid var(--border); border-radius: 12px;
+  box-shadow: var(--shadow); padding: 16px; margin-bottom: 16px;
+}
+
+.header { display: flex; justify-content: space-between; align-items: center; }
+.brand { font-weight: 800; font-size: 18px; color: var(--brand); }
+.sub { color: var(--muted); }
+
+.section { margin-top: 12px; }
+.section h3 { color: var(--brand); margin: 0 0 6px 0; }
+
+.grid2 {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px;
+}
+
+table { width: 100%; border-collapse: collapse; background: #fff; }
+thead th { background: #f9fafb; font-weight: 700; }
+th, td { border: 1px solid var(--border); padding: 6px 8px; text-align: left; }
+
+.actions { display: flex; gap: 10px; margin-top: 12px; }
+.actions.center { justify-content: center; }
+.btn-primary {
+  padding: 10px 14px; border: none; border-radius: 8px;
+  background: var(--primary); color: #fff; font-weight: 600; cursor: pointer;
+}
+.btn-outline {
+  padding: 10px 14px; border: 1px solid var(--primary); border-radius: 8px;
+  background: transparent; color: var(--primary); font-weight: 600; cursor: pointer; text-decoration: none;
+}
+
+.muted { color: var(--muted); } .small { font-size: 12px; } .center { text-align: center; }

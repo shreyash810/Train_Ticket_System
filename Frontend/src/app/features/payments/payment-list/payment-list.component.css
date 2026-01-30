@@ -1,0 +1,234 @@
+
+/* ===========================
+   Theme Tokens (Light/Dark)
+   =========================== */
+:host {
+  --bg: #0f172a;            /* slate-900 */
+  --card: #111827;          /* gray-900 */
+  --muted: #94a3b8;         /* slate-400 */
+  --text: #e5e7eb;          /* gray-200 */
+  --heading: #f8fafc;       /* slate-50 */
+  --primary: #3b82f6;       /* blue-500 */
+  --primary-600: #2563eb;   /* blue-600 */
+  --primary-700: #1d4ed8;   /* blue-700 */
+  --success: #22c55e;       /* green-500 */
+  --warn: #f59e0b;          /* amber-500 */
+  --danger: #ef4444;        /* red-500 */
+  --ring: rgba(59, 130, 246, 0.35);
+  --border: rgba(148, 163, 184, 0.18);
+  --row: rgba(255, 255, 255, 0.02);
+  --row-hover: rgba(59, 130, 246, 0.08);
+  --shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+/* Optional: Auto-light mode if your app uses it globally
+@media (prefers-color-scheme: light) {
+  :host {
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --muted: #64748b;
+    --text: #0f172a;
+    --heading: #0b1220;
+    --primary: #2563eb;
+    --primary-600: #1d4ed8;
+    --primary-700: #1e40af;
+    --success: #16a34a;
+    --warn: #d97706;
+    --danger: #dc2626;
+    --ring: rgba(37, 99, 235, 0.25);
+    --border: rgba(15, 23, 42, 0.08);
+    --row: rgba(2, 6, 23, 0.02);
+    --row-hover: rgba(37, 99, 235, 0.08);
+    --shadow: 0 10px 30px rgba(2,6,23,0.06);
+  }
+}
+*/
+
+/* ===========================
+   Page Shell
+   =========================== */
+.page {
+  min-height: calc(100dvh - 120px);
+  background: radial-gradient(1200px 800px at 10% -10%, rgba(59,130,246,.12), transparent 40%),
+              radial-gradient(1200px 800px at 110% -20%, rgba(34,197,94,.10), transparent 45%),
+              var(--bg);
+  padding: 28px clamp(12px, 3vw, 28px);
+}
+
+.page h2 {
+  margin: 0 0 18px 0;
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: var(--heading);
+}
+
+/* ===========================
+   Card/Table Container
+   =========================== */
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  backdrop-filter: saturate(120%) blur(4px);
+}
+
+/* ===========================
+   Table Header
+   =========================== */
+.table thead {
+  background: linear-gradient(180deg, rgba(59,130,246,0.14), rgba(59,130,246,0.08));
+}
+
+.table thead th {
+  text-align: left;
+  color: var(--heading);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13.5px;
+  text-transform: uppercase;
+}
+
+/* ===========================
+   Table Body Rows
+   =========================== */
+.table tbody tr {
+  background: var(--row);
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.table tbody tr:hover {
+  background: var(--row-hover);
+}
+
+.table tbody td {
+  padding: 14px 16px;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  font-size: 14.5px;
+}
+
+/* Amount column – make it stand out slightly */
+.table tbody td:nth-child(3) {
+  font-weight: 600;
+  color: var(--heading);
+}
+
+/* Status pills */
+.table tbody td:nth-child(4) {
+  font-weight: 600;
+}
+.table tbody td:nth-child(4) span {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: 0.2px;
+  border: 1px solid var(--border);
+}
+.status-paid   { background: rgba(34,197,94,.15);  color: #86efac;  border-color: rgba(34,197,94,.25); }
+.status-pending{ background: rgba(245,158,11,.15); color: #fcd34d;  border-color: rgba(245,158,11,.25); }
+.status-failed { background: rgba(239,68,68,.15);  color: #fca5a5;  border-color: rgba(239,68,68,.25); }
+
+/* “Paid At” format tweak for better readability */
+.table tbody td:last-child {
+  white-space: nowrap;
+  color: var(--muted);
+}
+
+/* ===========================
+   Loading & Error
+   =========================== */
+.error {
+  margin: 10px 0 14px;
+  padding: 12px 14px;
+  border: 1px solid rgba(239,68,68,0.35);
+  background: rgba(239,68,68,0.12);
+  color: #fecaca;
+  border-radius: 10px;
+}
+
+.loading {
+  margin: 8px 0 16px;
+  color: var(--muted);
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+.loading::before {
+  content: '';
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--primary);
+  border-right-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===========================
+   Pagination
+   =========================== */
+.pagination {
+  margin: 14px 2px 0;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.pagination button {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+  color: var(--text);
+  padding: 8px 14px;
+  font-size: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+}
+
+.pagination button:hover {
+  transform: translateY(-1px);
+  border-color: var(--ring);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.16);
+}
+
+.pagination span {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ===========================
+   Responsive tweaks
+   =========================== */
+@media (max-width: 920px) {
+  .table thead th,
+  .table tbody td {
+    padding: 12px 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .page { padding: 20px 12px; }
+
+  .table {
+    display: block;
+    overflow-x: auto;
+    border-radius: 12px;
+  }
+
+  .pagination {
+    justify-content: center;
+  }
+}

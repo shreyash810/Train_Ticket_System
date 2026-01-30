@@ -1,0 +1,71 @@
+
+<div class="page">
+  <h2>Ticket</h2>
+  <div class="muted" *ngIf="message()">{{ message() }}</div>
+
+  <section class="card ticket" *ngIf="reservation() as r">
+    <div class="header">
+      <div>
+        <div class="brand">Rail IN</div>
+        <div class="sub">Reservation Ticket</div>
+      </div>
+      <div class="id">
+        <div><strong>Reservation ID:</strong> {{ r.reservationId }}</div>
+        <div><strong>Payment Status:</strong> {{ r.paymentStatus }}</div>
+        <div><strong>Transaction ID:</strong> {{ r.paymentTransactionId }}</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Train Details</h3>
+      <div class="grid2">
+        <div><strong>Train No:</strong> {{ r.train.trainNo }}</div>
+        <div><strong>Train Name:</strong> {{ r.train.trainName }}</div>
+        <div><strong>Origin:</strong> {{ r.train.origin }} ({{ r.train.originStation }})</div>
+        <div><strong>Destination:</strong> {{ r.train.destination }} ({{ r.train.destinationStation }})</div>
+        <div><strong>Departure Time:</strong> {{ r.train.departureTime }}</div>
+        <div><strong>Arrival Time:</strong> {{ r.train.arrivalTime }}</div>
+        <div><strong>Class:</strong> {{ r.train.class }}</div>
+        <div><strong>Date:</strong> {{ r.travelDate }}</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Passengers</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th><th>Age</th><th>Gender</th><th>ID Proof</th><th>Seat</th><th>Coach</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of r.passengers">
+            <td>{{ p.name }}</td>
+            <td>{{ p.age }}</td>
+            <td>{{ p.gender }}</td>
+            <td>{{ (p.idType || '-') + ' / ' + (p.idNumber || '-') }}</td>
+            <td>{{ p.seatNumber || '-' }}</td>
+            <td>{{ coachFromSeat(p.seatNumber) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h3>Instructions</h3>
+      <ul>
+        <li *ngFor="let i of instructions">{{ i }}</li>
+      </ul>
+    </div>
+
+    <div class="actions center">
+      <button class="btn-primary" (click)="printTicket()">Download/Print Ticket</button>
+      <a class="btn-outline" (click)="backToReservations()">Back to My Reservations</a>
+    </div>
+
+    <div class="muted small center" style="margin-top:8px;">
+      Clicking "Download/Print Ticket" will open the browser dialog (choose "Save as PDF").
+      <br/>Your Ticket has been successfully downloaded.
+    </div>
+  </section>
+</div>

@@ -1,0 +1,31 @@
+
+.page { max-width: 800px; margin: 24px auto; padding: 0 16px; }
+h2 { color: var(--brand); margin-bottom: 12px; }
+.card {
+  background: #fff; border: 1px solid var(--border); border-radius: 12px;
+  box-shadow: var(--shadow); padding: 16px;
+}
+.grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;
+}
+.field { display: flex; flex-direction: column; }
+.field label { font-weight: 700; color: var(--brand); margin-bottom: 6px; }
+input[type="text"], input[type="email"], textarea, select {
+  padding: 10px 12px; border: 1px solid #c7d2fe; border-radius: 8px; font-size: 14px;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+textarea { resize: vertical; }
+.note { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.error { color: var(--danger); font-size: 12px; margin-top: 6px; }
+
+.actions { display: flex; gap: 10px; margin-top: 14px; }
+.btn-primary {
+  padding: 10px 14px; border: none; border-radius: 8px; background: var(--primary); color: #fff; font-weight: 600; cursor: pointer;
+}
+.btn-outline {
+  padding: 10px 14px; border: 1px solid var(--primary); border-radius: 8px; background: transparent; color: var(--primary); font-weight: 600; cursor: pointer; text-decoration: none;
+}
+.message { margin-top: 10px; }
+.message.success { color: var(--success); }

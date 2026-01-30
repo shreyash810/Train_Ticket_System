@@ -1,0 +1,60 @@
+
+<div class="page">
+  <h2>Edit Profile</h2>
+
+  <section class="card" *ngIf="user() as u">
+    <form [formGroup]="form" (ngSubmit)="onSave()" novalidate>
+      <div class="grid">
+        <div class="field">
+          <label>Full Name *</label>
+          <input type="text" formControlName="name" placeholder="Your full name" />
+          <div class="error" *ngIf="f['name'].touched && f['name'].errors">
+            <span *ngIf="f['name'].errors['required']">Please fill in all required fields.</span>
+            <span *ngIf="f['name'].errors['nameInvalid']">Name must be at least 3 characters long and contain only letters.</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Mobile *</label>
+          <input type="text" formControlName="mobile" placeholder="10 digits" />
+          <div class="error" *ngIf="f['mobile'].touched && f['mobile'].errors">
+            <span *ngIf="f['mobile'].errors['required']">Please fill in all required fields.</span>
+            <span *ngIf="f['mobile'].errors['mobileInvalid']">Please enter a valid phone number with country code.</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Address *</label>
+          <textarea rows="3" formControlName="address"></textarea>
+          <div class="error" *ngIf="f['address'].touched && f['address'].errors">
+            <span *ngIf="f['address'].errors['required']">Please fill in all required fields.</span>
+            <span *ngIf="f['address'].errors['addressTooShort']">Address must be at least 10 characters long.</span>
+          </div>
+        </div>
+
+        <!-- read-only -->
+        <div class="field">
+          <label>User ID (DB)</label>
+          <input type="text" formControlName="id" [disabled]="true" />
+        </div>
+
+        <div class="field">
+          <label>Email</label>
+          <input type="email" formControlName="email" [disabled]="true" />
+        </div>
+
+        <div class="field">
+          <label>Date of Birth</label>
+          <input type="text" formControlName="dob" [disabled]="true" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn-primary" [disabled]="form.invalid || saving()">Save Changes</button>
+        <a routerLink="/my-profile" class="btn-outline">Cancel</a>
+      </div>
+
+      <div class="message" [class.success]="message()" *ngIf="message()">{{ message() }}</div>
+    </form>
+  </section>
+</div>

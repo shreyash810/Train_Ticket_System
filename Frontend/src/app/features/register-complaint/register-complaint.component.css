@@ -1,0 +1,37 @@
+
+.page { max-width: 640px; margin: 28px auto; padding: 0 16px; }
+h2 { color: var(--brand); margin: 0 0 12px; }
+
+.card {
+  background: #fff; border: 1px solid var(--border); border-radius: 12px;
+  box-shadow: var(--shadow); padding: 16px;
+}
+
+.form-group { display: flex; flex-direction: column; margin-bottom: 14px; }
+label { font-weight: 600; margin-bottom: 6px; }
+
+input[type="text"], select, textarea {
+  padding: 10px 12px; border: 1px solid #c7d2fe; border-radius: 8px; font-size: 14px;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+textarea { resize: vertical; min-height: 100px; }
+
+.radio { display: flex; gap: 18px; margin-top: 6px; }
+.radio label { font-weight: 500; }
+
+.actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.actions.center { justify-content: center; }
+
+.btn-primary {
+  padding: 10px 14px; border: none; border-radius: 8px; background: var(--primary); color: #fff; font-weight: 600; cursor: pointer;
+}
+.btn-outline {
+  padding: 10px 14px; border: 1px solid var(--primary); border-radius: 8px; background: transparent; color: var(--primary); font-weight: 600; cursor: pointer;
+}
+
+.error { color: var(--danger); font-size: 12px; margin-top: 6px; }
+.error.global { margin-top: 10px; }
+.success { margin-top: 14px; color: var(--success); }
+.muted { color: var(--muted); } .small { font-size: 12px; }

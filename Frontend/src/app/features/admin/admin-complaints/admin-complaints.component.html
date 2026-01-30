@@ -1,0 +1,92 @@
+
+<h2>Admin Complaint Dashboard</h2>
+
+<div *ngIf="error()" class="text-red-600">{{ error() }}</div>
+
+<!-- FILTERS -->
+<div class="filters">
+  <!-- Do not two-way bind signals. Use [ngModel] + (ngModelChange) -->
+  <input
+    placeholder="Search by ID / Title"
+    [ngModel]="searchText()"
+    (ngModelChange)="searchText.set($event); filterComplaints()"
+  />
+
+  <select
+    [ngModel]="statusFilter()"
+    (ngModelChange)="statusFilter.set($event); filterComplaints()"
+  >
+    <option value="">All Status</option>
+    <option>OPEN</option>
+    <option>IN_PROGRESS</option>
+    <option>RESOLVED</option>
+    <option>CLOSED</option>
+  </select>
+
+  <select
+    [ngModel]="categoryFilter()"
+    (ngModelChange)="categoryFilter.set($event); filterComplaints()"
+  >
+    <option value="">All Categories</option>
+    <option>Train Issue</option>
+    <option>Reservation Process Issue</option>
+    <option>Payment Issue</option>
+    <option>Ticket Generation Issue</option>
+  </select>
+</div>
+
+<!-- TABLE -->
+<table class="table" *ngIf="paginated().length">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Title</th>
+      <th>Category</th>
+      <th>Status</th>
+      <th>Created</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let c of paginated()" (click)="selectComplaint(c)" class="clickable-row">
+      <td>{{ cmpId(c.id) }}</td>
+      <td>{{ c.title }}</td>
+      <td>{{ c.category }}</td>
+      <td>{{ c.status }}</td>
+      <td>{{ c.createdAt | date:'medium' }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- PAGINATION -->
+<div class="pagination" *ngIf="filtered().length">
+  <button (click)="prev()">Previous</button>
+  <span>Page {{ page() }}</span>
+  <button (click)="next()">Next</button>
+</div>
+
+<hr />
+
+<!-- DETAIL + ASSIGN -->
+<div *ngIf="selected as s" class="detail-card">
+  <h3>Complaint Details</h3>
+  <p><b>ID:</b> {{ s.id }}</p>
+  <p><b>Title:</b> {{ s.title }}</p>
+  <p><b>Category:</b> {{ s.category }}</p>
+  <p><b>Status:</b> {{ s.status }}</p>
+  <p><b>Description:</b> {{ s.description }}</p>
+  <p><b>Created:</b> {{ s.createdAt | date:'medium' }}</p>
+
+  <h4>Assign to Staff</h4>
+  <select
+    [ngModel]="selectedStaffId()"
+    (ngModelChange)="selectedStaffId.set($event)"
+  >
+    <option [ngValue]="null">-- Select Staff --</option>
+    <option *ngFor="let s of staff()" [ngValue]="s.id">
+      {{ s.name }} ({{ s.department }})
+    </option>
+  </select>
+  <button (click)="assign()" [disabled]="!selectedStaffId()">Assign</button>
+
+  <div class="muted small" *ngIf="notify()">{{ notify() }}</div>
+</div>

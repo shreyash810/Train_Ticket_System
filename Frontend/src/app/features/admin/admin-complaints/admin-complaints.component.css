@@ -1,0 +1,42 @@
+
+:host { --brand: #1e3a8a; }
+
+h2 { color: var(--brand); margin-bottom: 20px; }
+
+.filters { display:flex; gap:12px; margin-bottom:25px; flex-wrap:wrap; }
+.filters input, .filters select { padding:8px; font-size:14px; }
+
+.table { width:100%; border-collapse:collapse; background:#fff; }
+.table thead { background: var(--brand); color:#fff; }
+.table th, .table td { border:1px solid #cfd8dc; padding:10px; }
+
+.clickable-row { cursor:pointer; }
+.clickable-row:hover { background:#f1f6ff; }
+
+.pagination { margin-top:15px; display:flex; gap:12px; align-items:center; }
+.pagination button {
+  background: var(--brand); color:#fff; border:none; padding:8px 14px; cursor:pointer;
+}
+.pagination button:hover { background:#163375; }
+
+.detail-card {
+  margin-top:25px; border-left:4px solid var(--brand); padding-left:15px; background:#fff; padding:15px;
+}
+.detail-card select { margin-right:8px; padding:6px; }
+.detail-card textarea { width:100%; min-height:60px; margin-top:8px; }
+.detail-card button {
+  margin-top:6px; background: var(--brand); color:#fff; border:none; padding:6px 12px; cursor:pointer;
+}
+.detail-card button:hover { background:#163375; }
+.detail-card ul { margin-top:10px; padding-left:18px; }
+
+.notification {
+  margin: 10px 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  font-weight: 600;
+}
+

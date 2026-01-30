@@ -1,0 +1,37 @@
+
+<nav class="nav">
+  <div class="left">
+    <a routerLink="/home" class="brand">Rail IN</a>
+
+    <!-- Main links only when logged in -->
+    <ng-container *ngIf="isLoggedIn()">
+      <a routerLink="/home" routerLinkActive="active">Home</a>
+      <a routerLink="/book-ticket" routerLinkActive="active">Book Tickets</a>
+      <a routerLink="/my-reservations" routerLinkActive="active">My Reservations</a>
+      <a routerLink="/payments/list" routerLinkActive="active">Payments</a>
+      <a routerLink="/register-complaint" routerLinkActive="active">Register Complaint</a>
+      <a routerLink="/view-complaints" routerLinkActive="active">View Complaint</a>
+    </ng-container>
+  </div>
+
+  <div class="right">
+    <!-- When logged in: profile dropdown -->
+    <div class="profile dropdown" *ngIf="isLoggedIn(); else guestLinks">
+      <button class="profile-btn">
+        {{ userName() ? 'Welcome, ' + userName() : 'Profile' }} ▼
+      </button>
+      <div class="dropdown-content">
+        <a routerLink="/my-profile">My Profile</a>
+        <a routerLink="/edit-profile">Edit Profile</a>
+        <a (click)="logout()">Logout</a>
+      </div>
+    </div>
+
+    <!-- When NOT logged in -->
+    <ng-template #guestLinks>
+      <a routerLink="/login" routerLinkActive="active">Login</a>
+      <a routerLink="/register" routerLinkActive="active">Register</a>
+    </ng-template>
+  </div>
+</nav>
+

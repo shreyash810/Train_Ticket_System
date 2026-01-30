@@ -1,0 +1,46 @@
+
+<h2>Staff Complaint Dashboard</h2>
+<div *ngIf="error()" class="text-red-600">{{ error() }}</div>
+
+<table class="table" *ngIf="assignments().length">
+  <thead>
+    <tr>
+      <th>Assignment ID</th>
+      <th>Staff</th>
+      <th>Status</th>
+      <th>Updated</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let a of paginatedComplaints" (click)="select(a)">
+      <!-- Remove unnecessary optional chaining per NG8107 -->
+      <td>{{ a.id }}</td>
+      <td>{{ a.staff.name }} ({{ a.staff.department }})</td>
+      <td>{{ a.status }}</td>
+      <td>{{ a.updatedAt }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="pagination" *ngIf="assignments().length">
+  <button (click)="prev()">Previous</button>
+  <span>Page {{ page() }}</span>
+  <button (click)="next()">Next</button>
+</div>
+
+<div *ngIf="selected() as s" class="detail">
+  <h3>Assignment Details</h3>
+  <p><b>ID:</b> {{ s.id }}</p>
+  <p><b>Staff:</b> {{ s.staff.name }} ({{ s.staff.department }})</p>
+  <p><b>Status:</b> {{ s.status }}</p>
+  <p><b>Updated:</b> {{ s.updatedAt }}</p>
+
+  <h4>Update Status</h4>
+  <div class="actions">
+    <button (click)="updateStatus(s.id, 'IN_PROGRESS')">Start</button>
+    <button (click)="updateStatus(s.id, 'RESOLVED')">Resolve</button>
+    <button (click)="updateStatus(s.id, 'CLOSED')">Close</button>
+    <button (click)="updateStatus(s.id, 'ESCALATED')">Escalate</button>
+  </div>
+</div>
+

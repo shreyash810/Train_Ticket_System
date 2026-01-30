@@ -1,0 +1,214 @@
+
+:host { --brand: #1e3a8a; }
+
+h2 { color: var(--brand); margin-bottom: 20px; }
+
+.filters { display:flex; gap:10px; margin-bottom:25px; flex-wrap:wrap; }
+.filters input, .filters select { padding:8px; font-size:14px; }
+
+button {
+  background: var(--brand); color:#fff; border:none; padding:8px 14px; cursor:pointer; margin-right:10px;
+}
+button:hover { background:#163375; }
+
+.table { width:100%; border-collapse:collapse; background:#fff; }
+.table thead { background: var(--brand); color:#fff; }
+.table th, .table td { border:1px solid #cfd8dc; padding:10px; }
+
+.pagination { margin-top:15px; }
+
+.detail {
+  margin-top:25px; border-left:4px solid var(--brand); padding-left:15px;
+}
+
+/* ===========================
+   Enhancements on top of defaults
+   =========================== */
+
+/* Improve filters: round corners & subtle border */
+.filters input,
+.filters select {
+  border: 1px solid #cfd8dc;
+  border-radius: 6px;
+  background: #fff;
+  color: #0f172a;
+}
+.filters input:focus,
+.filters select:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--brand) 60%, #ffffff 40%);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 22%, transparent);
+}
+
+/* Primary buttons refinement */
+button {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(30, 58, 138, 0.15);
+  transition: transform 120ms ease, box-shadow 140ms ease, background 140ms ease;
+}
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(30, 58, 138, 0.18);
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Inline action buttons (Save/Discard) next to dropdown */
+td .inline-btn {
+  background: #eef2ff;              /* indigo-50 */
+  color: var(--brand);
+  border: 1px solid #c7d2fe;        /* indigo-200 */
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-left: 8px;
+}
+td .inline-btn:hover {
+  background: #e0e7ff;              /* indigo-100 */
+}
+td .inline-btn.secondary {
+  background: #f8fafc;              /* slate-50 */
+  color: #334155;                    /* slate-700 */
+  border: 1px solid #e2e8f0;         /* slate-200 */
+}
+td .inline-btn.secondary:hover {
+  background: #f1f5f9;              /* slate-100 */
+}
+
+/* ===========================
+   Table polishing
+   =========================== */
+
+/* Keep your header color scheme but improve row hover */
+.table tbody tr:hover {
+  background: #f8fafc; /* slate-50 */
+}
+
+/* Slightly emphasize numeric/amount columns */
+.table td:nth-child(3) {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Message and error boxes if used in component */
+.message {
+  margin: 10px 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #ecfeff;              /* cyan-50 */
+  color: #0e7490;                    /* cyan-700 */
+  border: 1px solid #a5f3fc;         /* cyan-200 */
+}
+.error {
+  margin: 10px 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #fff1f2;              /* rose-50 */
+  color: #be123c;                    /* rose-700 */
+  border: 1px solid #fecdd3;         /* rose-200 */
+}
+
+/* Pagination alignment & hover polish */
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pagination button {
+  border-radius: 8px;
+  border: 1px solid #cfd8dc;
+  background: #ffffff;
+  color: #0f172a;
+}
+.pagination button:hover {
+  border-color: color-mix(in srgb, var(--brand) 60%, #ffffff 40%);
+  background: #f8fafc;
+}
+
+/* ===========================
+   Inline Edit Dropdown (Select)
+   =========================== */
+
+/* Only target the select inside the status cell when in edit mode.
+   If you added a class to the select, replace 'td select' with that class. */
+td select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  min-width: 160px;
+  max-width: 240px;
+  padding: 8px 36px 8px 12px;
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+
+  background:
+    linear-gradient(180deg, rgba(2,6,23,0.03), rgba(2,6,23,0.01)),
+    #ffffff;
+  color: #0f172a;
+  border: 1px solid #cfd8dc;
+  box-shadow: 0 2px 8px rgba(2,6,23,0.06);
+
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease,
+    transform 100ms ease;
+
+  cursor: pointer;
+  outline: none;
+  position: relative;
+
+  /* Custom arrow */
+  background-image:
+    linear-gradient(45deg, transparent 50%, #475569 50%),
+    linear-gradient(135deg, #475569 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 50%,
+    calc(100% - 13px) 50%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+
+td select:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--brand) 60%, #ffffff 40%);
+  box-shadow:
+    0 6px 16px rgba(30, 58, 138, 0.12),
+    inset 0 0 0 999px rgba(2,6,23,0.01);
+}
+
+td select:focus {
+  border-color: color-mix(in srgb, var(--brand) 75%, #ffffff 25%);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--brand) 22%, transparent),
+    0 8px 24px rgba(29, 78, 216, 0.15);
+}
+
+td select:disabled {
+  cursor: not-allowed;
+  opacity: 0.75;
+  border-color: #e2e8f0; /* slate-200 */
+  box-shadow: none;
+}
+
+/* Spacing with inline action buttons */
+td select + button { margin-left: 8px; }
+td select + button + button { margin-left: 6px; }
+
+/* ===========================
+   Responsive tweak
+   =========================== */
+@media (max-width: 640px) {
+  td select {
+    min-width: 140px;
+    font-size: 13px;
+    padding: 7px 34px 7px 10px;
+    border-radius: 9px;
+  }
+}

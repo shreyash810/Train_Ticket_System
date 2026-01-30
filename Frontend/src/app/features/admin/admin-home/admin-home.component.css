@@ -1,0 +1,61 @@
+
+/* Layout */
+.wrap { max-width: 1000px; margin: 24px auto; padding: 16px;
+  background: #fff; border: 1px solid #e6e9ef; border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(15,23,42,.06); font-family: system-ui, Segoe UI, Roboto, Arial; color:#0f172a;
+}
+h2 { margin: 0 0 12px; }
+h3, h4 { margin: 12px 0 8px; }
+
+/* Navigation */
+.nav { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; align-items:center; }
+.nav button { padding:8px 12px; border:1px solid #e6e9ef; background:#fafafa; border-radius:8px; cursor:pointer; }
+.nav button.active { background:#2563eb; color:#fff; border-color:#2563eb; }
+.nav button:hover { background:#eef2ff; }
+
+.nav .link {
+  padding:8px 12px; border:1px solid #e6e9ef; background:#fafafa; border-radius:8px; text-decoration:none; color:#0f172a;
+  
+}
+.link{
+  cursor: pointer; color: blue;
+  
+}
+.nav .link:hover { background:#eef2ff; cursor: pointer;}
+
+/* Grid / Inputs */
+.grid { display:grid; grid-template-columns: repeat(3,1fr); gap:10px; }
+.grid label { display:flex; flex-direction:column; font-size:14px; color:#64748b; }
+.grid input { padding:8px; border:1px solid #e6e9ef; border-radius:8px; background:#fff; }
+
+/* Tables */
+table { width:100%; border-collapse:collapse; margin-top:8px; font-size:14px; }
+th, td { border:1px solid #e6e9ef; padding:10px; text-align:left; }
+th { background:#f8fafc; color:#64748b; font-weight:600; }
+
+/* Buttons */
+button { padding:8px 12px; border:1px solid #e6e9ef; background:#fff; border-radius:8px; cursor:pointer; }
+button:hover { background:#f1f5f9; }
+button.danger { background:#fee2e2; border-color:#fecaca; color:#7f1d1d; }
+
+/* Cards + Bars (charts) */
+.cards { display:grid; grid-template-columns: repeat(3,1fr); gap:12px; }
+.card { padding:12px; border:1px solid #e6e9ef; border-radius:12px; background:#f9fafb; }
+.bar { height:10px; background:#e5e7eb; border-radius:999px; overflow:hidden; margin-top:6px; }
+.fill { height:100%; background:#22c55e; }
+
+/* Edit panel + actions */
+.edit { margin-top:12px; padding:12px; border:1px dashed #e6e9ef; border-radius:12px; }
+.actions { margin-top:10px; display:flex; gap:8px; }
+
+/* Access denied */
+.denied { max-width:600px; margin:24px auto; padding:16px; background:#fff7ed;
+  border:1px solid #fdba74; border-radius:12px; color:#9a3412; text-align:center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .grid { grid-template-columns: 1fr; }
+  .cards { grid-template-columns: 1fr; }
+  .wrap { margin: 12px; padding: 12px; }
+}

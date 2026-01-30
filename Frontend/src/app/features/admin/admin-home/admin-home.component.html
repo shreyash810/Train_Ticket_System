@@ -1,0 +1,212 @@
+
+<div class="wrap">
+  <h2>Admin Console</h2>
+
+  <!-- NAV -->
+  <div class="nav">
+    <button [class.active]="tab() === 'dashboard'" (click)="go('dashboard')">Dashboard</button>
+    <button [class.active]="tab() === 'trains'" (click)="go('trains')">Trains</button>
+    <button [class.active]="tab() === 'reservations'" (click)="go('reservations')">Reservations</button>
+    <button [class.active]="tab() === 'profile'" (click)="go('profile')">Profile</button>
+
+    <!-- links to other admin tools -->
+    <a class="link" (click)="goComplaints()">Complaints</a>
+    <a class="link" (click)="goSearch()">Search Reservations</a>
+
+    <span style="flex:1"></span>
+
+    <!-- logout -->
+    <button class="danger" (click)="logout()">Logout</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <section *ngIf="tab() === 'dashboard'">
+    <div class="cards">
+      <div class="card">
+        <h3>Total Reservations</h3>
+        <div class="text-2xl">{{ totalReservations() }}</div>
+        <div class="bar"><div class="fill" [style.width]="(totalReservations() ? '100%' : '0%')"></div></div>
+      </div>
+      <div class="card">
+        <h3>Upcoming</h3>
+        <div class="text-2xl">{{ upcomingCount() }}</div>
+        <div class="bar">
+          <div class="fill" [style.width]="percent(upcomingCount(), totalReservations())"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Past</h3>
+        <div class="text-2xl">{{ pastCount() }}</div>
+        <div class="bar">
+          <div class="fill" [style.width]="percent(pastCount(), totalReservations())"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;">
+      <h3>Recent Reservations</h3>
+      <div *ngIf="reservationsLoading()">Loading reservations…</div>
+      <div *ngIf="reservationsError()" class="text-red-600">{{ reservationsError() }}</div>
+
+      <table *ngIf="!reservationsLoading() && reservations().length">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Train</th>
+            <th>Route</th>
+            <th>Travel Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of reservations() | slice:0:10">
+            <td>{{ r.id }}</td>
+            <td>{{ r.train.trainName }} ({{ r.train.trainNumber }})</td>
+            <td>{{ r.train.origin }} → {{ r.train.destination }}</td>
+            <td>{{ r.travelDate }}</td>
+            <td>{{ r.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="!reservationsLoading() && !reservations().length" class="muted">
+        No reservations yet.
+      </div>
+    </div>
+  </section>
+
+  <!-- TRAINS -->
+  <section *ngIf="tab() === 'trains'">
+    <h3>Add Train</h3>
+    <form #trainForm="ngForm" (ngSubmit)="addTrain(trainForm)" class="grid">
+      <label>Train Number
+        <input name="trainNumber" [(ngModel)]="newTrain.trainNumber" required />
+      </label>
+      <label>Train Name
+        <input name="trainName" [(ngModel)]="newTrain.trainName" required />
+      </label>
+      <label>Origin
+        <input name="origin" [(ngModel)]="newTrain.origin" required />
+      </label>
+      <label>Destination
+        <input name="destination" [(ngModel)]="newTrain.destination" required />
+      </label>
+      <label>Total Seats
+        <input type="number" min="1" name="totalSeats" [(ngModel)]="newTrain.totalSeats" required />
+      </label>
+    </form>
+    <div class="actions">
+      <button (click)="addTrain(trainForm)" [style.background]="'#1e3a8a'" style="color:#fff;">Add</button>
+      <span *ngIf="trainSubmitError()" class="text-red-600">{{ trainSubmitError() }}</span>
+      <span *ngIf="trainSubmitOk()" class="text-green-700">{{ trainSubmitOk() }}</span>
+    </div>
+
+    <!-- <div style="margin:12px 0;" class="grid">
+      <label>Filter by origin
+        <input [(ngModel)]="search.origin" />
+      </label>
+      <label>Filter by destination
+        <input [(ngModel)]="search.destination" />
+      </label>
+      <label>Filter by train no.
+        <input [(ngModel)]="search.trainNumber" />
+      </label>
+    </div> -->
+
+    <div *ngIf="trainsLoading()">Loading trains…</div>
+    <div *ngIf="trainsError()" class="text-red-600">{{ trainsError() }}</div>
+
+    <table *ngIf="!trainsLoading() && filteredTrains().length">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Train</th>
+          <th>Route</th>
+          <th>Seats</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of filteredTrains()">
+          <td>{{ t.id }}</td>
+          <td>{{ t.trainName }} ({{ t.trainNumber }})</td>
+          <td>{{ t.origin }} → {{ t.destination }}</td>
+          <td>{{ t.totalSeats }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!trainsLoading() && !filteredTrains().length" class="muted">
+      No trains found.
+    </div>
+  </section>
+
+  <!-- RESERVATIONS -->
+  <section *ngIf="tab() === 'reservations'">
+    <h3>All Reservations</h3>
+    <div *ngIf="reservationsLoading()">Loading reservations…</div>
+    <div *ngIf="reservationsError()" class="text-red-600">{{ reservationsError() }}</div>
+
+    <table *ngIf="!reservationsLoading() && reservations().length">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Train</th>
+          <th>Route</th>
+          <th>Travel Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of reservations()">
+          <td>{{ r.id }}</td>
+          <td>{{ r.train.trainName }} ({{ r.train.trainNumber }})</td>
+          <td>{{ r.train.origin }} → {{ r.train.destination }}</td>
+          <td>{{ r.travelDate }}</td>
+          <td>{{ r.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!reservationsLoading() && !reservations().length" class="muted">
+      No reservations yet.
+    </div>
+  </section>
+
+  <!-- PROFILE -->
+  <section *ngIf="tab() === 'profile'">
+    <div class="grid">
+      <div class="card">
+        <h3>Profile</h3>
+        <div *ngIf="!editing">
+          <p><b>Name:</b> {{ adminName }}</p>
+          <p><b>Email:</b> {{ adminEmail }}</p>
+          <p><b>Role:</b> {{ adminRole }}</p>
+          <div class="actions">
+            <button (click)="edit()">Edit</button>
+            <button class="danger" (click)="logout()">Logout</button>
+          </div>
+        </div>
+
+        <div *ngIf="editing" class="edit">
+          <div class="grid" style="grid-template-columns:1fr;">
+            <label>Name <input [(ngModel)]="adminName" /></label>
+            <label>Email <input [(ngModel)]="adminEmail" /></label>
+            <label>Role <input [(ngModel)]="adminRole" /></label>
+          </div>
+          <div class="actions">
+            <button [style.background]="'#1e3a8a'" style="color:#fff;" (click)="save()">Save</button>
+            <button (click)="cancel()">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a class="link" (click)="goComplaints()">Manage Complaints</a></li>
+          <li><a class="link" (click)="goSearch()">Search Reservations</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>

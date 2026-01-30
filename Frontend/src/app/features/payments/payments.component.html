@@ -1,0 +1,120 @@
+
+<div class="page">
+  <h2>Payment</h2>
+
+  <div class="muted" *ngIf="message()">{{ message() }}</div>
+
+  <section class="card" *ngIf="reservation() as r">
+    <div class="summary">
+      <div>
+        <strong>Reservation:</strong> {{ r.reservationId }}<br/>
+        <strong>Train:</strong> {{ r.train.trainName }} ({{ r.train.trainNo }})<br/>
+        <strong>Route:</strong> {{ r.train.originStation }} → {{ r.train.destinationStation }}<br/>
+        <strong>Date:</strong> {{ r.travelDate }} &nbsp; <strong>Class:</strong> {{ r.train.class }}<br/>
+        <strong>Passengers:</strong> {{ r.passengers.length }}
+      </div>
+
+      <div *ngIf="fees() as f">
+        <table class="fee-table">
+          <tr><td>Base Amount:</td><td>₹{{ f.baseAmount }}</td></tr>
+          <tr><td>GST (18%):</td><td>₹{{ f.gst }}</td></tr>
+          <tr><td>Convenience Fee:</td><td>₹{{ f.convenience }}</td></tr>
+          <tr><td>Platform Fee:</td><td>₹{{ f.platform }}</td></tr>
+          <tr class="total"><td>Total:</td><td>₹{{ f.total }}</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" *ngIf="reservation()">
+    <h3>Card Details</h3>
+
+    <!-- Demo cards -->
+    <div class="demo-cards">
+      <div class="badge" *ngFor="let c of demoCards" (click)="useDemo(c)">
+        {{ c.brand }}&nbsp;•&nbsp;{{ c.number }}&nbsp;•&nbsp;CVV {{ c.cvv }}&nbsp;•&nbsp;Exp {{ c.expiry }}
+      </div>
+    </div>
+    <div class="muted small">Click a demo card to auto-fill for testing.</div>
+
+    <form [formGroup]="form" (ngSubmit)="payNow()" novalidate class="grid">
+      <div class="field">
+        <label>Cardholder Name *</label>
+        <input type="text" formControlName="cardholderName" placeholder="Full name" />
+        <div class="error" *ngIf="f['cardholderName'].touched && f['cardholderName'].errors">
+          <span *ngIf="f['cardholderName'].errors['required']">Cardholder Name is required.</span>
+          <span *ngIf="f['cardholderName'].errors['minlength']">Name must be at least 3 characters.</span>
+          <span *ngIf="f['cardholderName'].errors['maxlength']">Name must be at most 50 characters.</span>
+          <span *ngIf="f['cardholderName'].errors['pattern']">Alphabetic characters only.</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Card Number *</label>
+        <input type="text" formControlName="cardNumber" placeholder="16 digits" />
+        <div class="error" *ngIf="f['cardNumber'].touched && f['cardNumber'].errors">
+          <span *ngIf="f['cardNumber'].errors['required']">Card Number is required.</span>
+          <span *ngIf="f['cardNumber'].errors['pattern']">Invalid card number</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Expiry (MM/YY) *</label>
+        <input type="text" formControlName="expiry" placeholder="MM/YY" />
+        <div class="error" *ngIf="f['expiry'].touched && f['expiry'].errors">
+          <span *ngIf="f['expiry'].errors['required']">Expiry date is required.</span>
+          <span *ngIf="f['expiry'].errors['invalidExpiry']">Use valid MM/YY format.</span>
+          <span *ngIf="f['expiry'].errors['expired']">Card expiry date must be in the future.</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>CVV *</label>
+        <input type="text" formControlName="cvv" placeholder="3 digits" />
+        <div class="error" *ngIf="f['cvv'].touched && f['cvv'].errors">
+          <span *ngIf="f['cvv'].errors['required']">CVV is required.</span>
+          <span *ngIf="f['cvv'].errors['invalidCvv']">Invalid CVV. Please check again.</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Billing Address (Optional)</label>
+        <textarea formControlName="billingAddress" rows="3" placeholder="Min 5 characters if provided"></textarea>
+        <div class="error" *ngIf="addressTooShort()">Billing Address must be at least 5 characters.</div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn-primary" [disabled]="form.invalid || processing()">Pay Now</button>
+      </div>
+
+      <div class="error global" *ngIf="message()">{{ message() }}</div>
+    </form>
+  </section>
+
+ 
+<!-- Confirmation Modal -->
+<div class="modal-backdrop" *ngIf="txnId()"></div>
+<div class="modal" *ngIf="txnId() && reservation() as r">
+  <h3>Payment successful! Your Reservation is confirmed.</h3>
+
+  <p><strong>Reservation ID:</strong> {{ r.reservationId }}</p>
+  <p><strong>Payment Transaction ID:</strong> {{ txnId() }}</p>
+
+  <!-- ✅ Use computed passengerNames() -->
+  <p><strong>Passengers:</strong> {{ passengerNames() }}</p>
+
+  <p>
+    <strong>Train:</strong>
+    {{ r.train.origin }} → {{ r.train.destination }} |
+    {{ r.train.originStation }} ({{ r.train.departureTime }}) →
+    {{ r.train.destinationStation }} ({{ r.train.arrivalTime }})
+  </p>
+
+  <!-- ✅ Use computed totalAmount() -->
+  <p><strong>Payment Amount:</strong> ₹{{ totalAmount() }}</p>
+
+  <div class="actions center">
+    <button class="btn-primary" (click)="gotoTicket()">View Ticket</button>
+    <a class="btn-outline" routerLink="/my-reservations">Go to My Reservations</a>
+  </div>
+</div>

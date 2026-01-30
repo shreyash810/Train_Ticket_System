@@ -1,0 +1,198 @@
+
+<div class="page">
+  <h2>Reservation History</h2>
+  <div class="muted" *ngIf="message()">{{ message() }}</div>
+
+  <!-- Upcoming -->
+  <section class="card">
+    <h3>Upcoming Reservations</h3>
+    <div *ngIf="upcoming().length === 0" class="muted">No upcoming reservations.</div>
+
+    <div class="res-item" *ngFor="let r of upcoming()">
+      <div class="row-between">
+        <div>
+          <div><strong>Reservation ID:</strong> {{ r.reservationId }}</div>
+          <div><strong>Payment Txn:</strong> {{ r.paymentTransactionId || '-' }}</div>
+          <div>
+            <strong>No. of Passengers:</strong>
+            <a class="link" (click)="togglePassengers(r.reservationId)">{{ r.passengers.length }}</a>
+          </div>
+        </div>
+        <div class="muted small">
+          {{ r.train.origin }} → {{ r.train.destination }}<br />
+          {{ r.train.originStation }} ({{ r.train.departureTime }}) → {{ r.train.destinationStation }} ({{ r.train.arrivalTime }})<br />
+          Date: {{ r.travelDate }} | Class: {{ r.train.class }}
+        </div>
+      </div>
+
+      <!-- Passengers -->
+      <div class="passengers" *ngIf="showPassengers() === r.reservationId">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th><th>Age</th><th>Gender</th><th>ID</th><th>Seat</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of r.passengers">
+              <td>{{ p.name }}</td>
+              <td>{{ p.age }}</td>
+              <td>{{ p.gender }}</td>
+              <td>{{ (p.idType || '-') + ' / ' + (p.idNumber || '-') }}</td>
+              <td>{{ p.seatNumber || '-' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row-between">
+        <div><strong>Amount:</strong> ₹{{ r.amount }}</div>
+        <div><strong>Status:</strong> {{ r.status }}</div>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions">
+        <button class="btn-outline" (click)="openDetails(r)">View Details</button>
+
+        <button class="btn-danger" (click)="startCancel(r)">Cancel Reservation</button>
+
+        <button class="btn-primary"
+                [disabled]="downloadDisabled(r)"
+                title="{{ pendingTicketMessage(r) || '' }}">
+          Download Ticket
+        </button>
+      </div>
+
+      <div class="muted small" *ngIf="pendingTicketMessage(r)">{{ pendingTicketMessage(r) }}</div>
+    </div>
+  </section>
+
+  <!-- Past -->
+  <section class="card">
+    <h3>Past Reservations</h3>
+    <div *ngIf="past().length === 0" class="muted">No past reservations.</div>
+
+    <div class="res-item" *ngFor="let r of past()">
+      <div class="row-between">
+        <div>
+          <div><strong>Reservation ID:</strong> {{ r.reservationId }}</div>
+          <div><strong>Payment Txn:</strong> {{ r.paymentTransactionId || '-' }}</div>
+          <div>
+            <strong>No. of Passengers:</strong>
+            <a class="link" (click)="togglePassengers(r.reservationId)">{{ r.passengers.length }}</a>
+          </div>
+        </div>
+        <div class="muted small">
+          {{ r.train.origin }} → {{ r.train.destination }}<br />
+          {{ r.train.originStation }} ({{ r.train.departureTime }}) → {{ r.train.destinationStation }} ({{ r.train.arrivalTime }})<br />
+          Date: {{ r.travelDate }} | Class: {{ r.train.class }}
+        </div>
+      </div>
+
+      <!-- Passengers -->
+      <div class="passengers" *ngIf="showPassengers() === r.reservationId">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th><th>Age</th><th>Gender</th><th>ID</th><th>Seat</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of r.passengers">
+              <td>{{ p.name }}</td>
+              <td>{{ p.age }}</td>
+              <td>{{ p.gender }}</td>
+              <td>{{ (p.idType || '-') + ' / ' + (p.idNumber || '-') }}</td>
+              <td>{{ p.seatNumber || '-' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Canceled label -->
+      <div class="warn" *ngIf="r.status === 'canceled'">
+        This Reservation was canceled on {{ r.canceledAt ? r.canceledAt.substring(0,10) : '—' }}.
+      </div>
+
+      <div class="row-between">
+        <div><strong>Amount:</strong> ₹{{ r.amount }}</div>
+        <div><strong>Status:</strong> {{ r.status }}</div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-outline" (click)="openDetails(r)">View Details</button>
+        <button class="btn-primary" [disabled]="downloadDisabled(r)">Download tickets</button>
+      </div>
+
+      <div class="muted small" *ngIf="pendingTicketMessage(r)">{{ pendingTicketMessage(r) }}</div>
+    </div>
+  </section>
+</div>
+
+<!-- Details Modal -->
+<div class="modal-backdrop" *ngIf="showDetails()"></div>
+<div class="modal" *ngIf="showDetails()">
+  <h3>Reservation Details</h3>
+  <div *ngIf="detailsReservation() as r">
+    <p><strong>Reservation ID:</strong> {{ r.reservationId }}</p>
+    <p><strong>Payment Txn:</strong> {{ r.paymentTransactionId || '-' }}</p>
+    <p><strong>Train:</strong> {{ r.train.trainName }} ({{ r.train.trainNo }})</p>
+    <p><strong>Route:</strong> {{ r.train.originStation }} → {{ r.train.destinationStation }}</p>
+    <p><strong>Departure:</strong> {{ r.train.departureTime }} | <strong>Arrival:</strong> {{ r.train.arrivalTime }}</p>
+    <p><strong>Date:</strong> {{ r.travelDate }}</p>
+    <p><strong>Class:</strong> {{ r.train.class }}</p>
+    <p><strong>Passengers:</strong> {{ r.passengers.length }}</p>
+    <p><strong>Amount:</strong> ₹{{ r.amount }}</p>
+    <p><strong>Status:</strong> {{ r.status }}</p>
+  </div>
+  <div class="actions center">
+    <button class="btn-primary" (click)="closeDetails()">Close</button>
+  </div>
+</div>
+
+<!-- Cancel Modal -->
+<div class="modal-backdrop" *ngIf="showCancel()"></div>
+<div class="modal" *ngIf="showCancel()">
+  <h3>Cancel Reservation</h3>
+
+  <div *ngIf="cancelReservation() as r; else cancelMsg">
+    <div *ngIf="cancelInfo() as info; else noRefundBlock">
+      <p>
+        Canceling now will result in a <strong>{{ info.refundPercent }}%</strong> refund
+        (₹{{ info.amount }}) as per the ticket cancellation policy.
+      </p>
+    </div>
+
+    <ng-template #noRefundBlock>
+      <p>As per the ticket cancellation policy, this Reservation is non-refundable.</p>
+    </ng-template>
+
+    <form [formGroup]="cancelForm" (ngSubmit)="confirmCancel()" novalidate>
+      <div class="form-group">
+        <label>Confirm with your password</label>
+        <input type="password" formControlName="password" placeholder="Enter password to confirm" />
+        <div class="error" *ngIf="cancelForm.get('password')?.touched && cancelForm.get('password')?.errors">
+          <span *ngIf="cancelForm.get('password')?.errors?.['required']">Password is required.</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-danger" type="submit" [disabled]="cancelForm.invalid">Confirm Cancel</button>
+        <button class="btn-outline" type="button" (click)="closeCancel()">Close</button>
+      </div>
+    </form>
+
+    <div class="muted small" style="margin-top:8px;">
+      Refunds are processed within 3–5 business days (if eligible).
+    </div>
+  </div>
+
+  <ng-template #cancelMsg>
+    <p>{{ cancelOutcome() }}</p>
+    <div class="actions center">
+      <button class="btn-primary" (click)="closeCancel()">Close</button>
+    </div>
+  </ng-template>
+
+  <div class="success" *ngIf="cancelOutcome()">{{ cancelOutcome() }}</div>
+</div>

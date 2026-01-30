@@ -1,0 +1,20 @@
+
+:host { --brand: #1e3a8a; }
+
+h2 { color: var(--brand); margin-bottom:16px; font-weight:bold; }
+
+.table { width:100%; border-collapse:collapse; margin-bottom:20px; background:#fff; }
+.table thead { background: var(--brand); color:#fff; }
+.table th, .table td { border:1px solid #cfd8dc; padding:10px; text-align:left; }
+.table tbody tr:hover { background:#f1f6ff; cursor:pointer; }
+
+.detail { margin-top:25px; padding-top:15px; border-top:2px solid var(--brand); }
+
+textarea { width:100%; min-height:70px; margin-top:6px; }
+
+button {
+  margin-top:8px; background: var(--brand); color:#fff; border:none; padding:8px 14px; cursor:pointer;
+}
+button:hover { background:#163375; }
+
+.pagination { margin-top:15px; display:flex; gap:12px; align-items:center; }

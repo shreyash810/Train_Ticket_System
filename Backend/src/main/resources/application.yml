@@ -1,0 +1,31 @@
+
+spring:
+  datasource:
+    # In-memory DB for dev; stays alive while the app runs
+    url: jdbc:h2:mem:traindb;MODE=LEGACY;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      # Use update (safer than create) so tables are created/updated but not dropped each restart
+      ddl-auto: update
+    show-sql: true
+    # If you later add schema.sql/data.sql, run them after JPA creates tables
+    defer-datasource-initialization: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  mvc:
+    # Ensures OPTIONS (CORS preflight) is handled by Spring MVC so your CorsConfig applies
+    dispatch-options-request: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+server:
+  error:
+    include-message: always
+    include-binding-errors: always

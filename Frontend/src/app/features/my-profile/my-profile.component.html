@@ -1,0 +1,45 @@
+
+<div class="page">
+  <h2>My Profile</h2>
+
+  <div *ngIf="loading()">Loading…</div>
+  <div class="error" *ngIf="error()">{{ error() }}</div>
+
+  <section class="card" *ngIf="user() as u">
+    <div class="grid">
+      <div class="field">
+        <label>User ID (DB)</label>
+        <div class="value">{{ u.id }}</div>
+      </div>
+
+      <div class="field">
+        <label>Full Name</label>
+        <div class="value">{{ u.name }}</div>
+      </div>
+
+      <div class="field">
+        <label>Email</label>
+        <div class="value">{{ u.email }}</div>
+      </div>
+
+      <div class="field">
+        <label>Mobile</label>
+        <div class="value">{{ u.mobile }}</div>
+      </div>
+
+      <div class="field">
+        <label>Address</label>
+        <div class="value">{{ u.address }}</div>
+      </div>
+
+      <div class="field">
+        <label>Date of Birth</label>
+        <div class="value">{{ u.dob }}</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a routerLink="/edit-profile" class="btn-primary">Edit Profile</a>
+    </div>
+  </section>
+</div>

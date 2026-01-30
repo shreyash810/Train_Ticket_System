@@ -1,0 +1,37 @@
+
+<!-- <app-navbar></app-navbar> -->
+
+<!-- Full-page background hero -->
+<div class="hero">
+  <div class="overlay">
+    <div class="container">
+      <h2>Welcome, {{ userName() || 'Passenger' }}!</h2>
+      <p class="lead">
+        Explore Rail IN — search and book tickets, manage reservations, payments, complaints, and your profile.
+      </p>
+
+      <section class="cards">
+        <div class="card">
+          <h3>Book Tickets</h3>
+          <p>Find trains by origin, destination, and date. View class availability in real-time.</p>
+          <a routerLink="/book-ticket">Go to Booking →</a>
+        </div>
+        <div class="card">
+          <h3>My Reservations</h3>
+          <p>View upcoming and past reservations, download tickets, cancel if needed.</p>
+          <a routerLink="/my-reservations">View Reservations →</a>
+        </div>
+        <div class="card">
+          <h3>Payments</h3>
+          <p>Complete payments securely and access transaction details.</p>
+          <a routerLink="/payments">Go to Payments →</a>
+        </div>
+        <div class="card">
+          <h3>Complaints</h3>
+          <p>Register complaints and track their status to resolution.</p>
+          <a routerLink="/register-complaint">Register Complaint →</a>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

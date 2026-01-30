@@ -1,0 +1,54 @@
+
+<div class="page">
+  <h2>View Complaints</h2>
+
+  <div class="muted" *ngIf="message()">{{ message() }}</div>
+
+  <section class="card" *ngIf="complaints().length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>Complaint ID</th>
+          <th>Category</th>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Expected Resolution</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- ✅ Use $any(c).backendId to bypass template type check -->
+        <tr *ngFor="let c of complaints()">
+          <td>{{ complaintSvc.formatCmpId($any(c).backendId) }}</td>
+          <td>{{ c.category }}</td>
+          <td>{{ c.title }}</td>
+          <td>{{ c.status }}</td>
+          <td>{{ c.expectedResolutionDate ? (c.expectedResolutionDate | date:'mediumDate') : '-' }}</td>
+          <td><button class="btn-outline" (click)="view(c)">View</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card details" *ngIf="selected() as s">
+    <h3>Complaint Details</h3>
+
+    <!-- ✅ Use $any(s).backendId here as well -->
+    <p><b>ID:</b> {{ complaintSvc.formatCmpId($any(s).backendId) }}</p>
+    <p><b>Category:</b> {{ s.category }}</p>
+    <p><b>Title:</b> {{ s.title }}</p>
+    <p><b>Description:</b> {{ s.description }}</p>
+    <p><b>Status:</b> {{ s.status }}</p>
+    <p><b>Submitted:</b> {{ s.createdAt | date:'medium' }}</p>
+    <p><b>Updated:</b> {{ s.updatedAt | date:'medium' }}</p>
+
+    <div class="actions" *ngIf="s.status === 'Resolved'">
+      <button class="btn-primary" (click)="confirmResolution()">Confirm Resolution</button>
+      <button class="btn-outline" (click)="reopenComplaint()">Reopen Complaint</button>
+    </div>
+
+    <div class="muted small" *ngIf="s.status === 'Closed'">
+      Complaint is closed.
+    </div>
+  </section>
+</div>
