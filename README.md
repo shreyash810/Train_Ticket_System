@@ -100,12 +100,15 @@ The system comes pre-loaded with the following users for testing:
 ## 📸 Screenshots
 
 ### Home Page
+<img width="1908" height="1074" alt="Screenshot 2026-01-29 163956" src="https://github.com/user-attachments/assets/757eb8cf-4b45-47f8-b100-0760414b8e1a" />
 
 
 ### Admin Dashboard
+<img width="1600" height="831" alt="admin_dashboard" src="https://github.com/user-attachments/assets/eaff175c-8cb9-4eeb-be9f-1a941b484190" />
 
 
 ### Staff Complaint View
+<img width="1600" height="798" alt="staff_dashboard" src="https://github.com/user-attachments/assets/9977b7f7-afa5-4069-a6a7-9d71b67f5392" />
 
 ---
 
